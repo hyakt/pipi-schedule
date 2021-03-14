@@ -1,0 +1,30 @@
+{
+  "name": "pipi-schedule",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "config": {
+    "function_name": "pipiScedule",
+    "runtime": "nodejs12"
+  },
+  "scripts": {
+    "deploy": "gcloud functions deploy $npm_package_config_function_name --runtime $npm_package_config_runtime --trigger-http",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyakt/pipi-schedule.git"
+  },
+  "author": "hyakt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyakt/pipi-schedule/issues"
+  },
+  "homepage": "https://github.com/hyakt/pipi-schedule#readme",
+  "dependencies": {
+    "googleapis": "^67.1.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  }
+}
