@@ -30,6 +30,25 @@ const authorize = async () => {
   }
 };
 
+const sendMessage = (message: string): void => {
+  const params = new FormData();
+  params.append("message", `${message}`);
+  fetch("https://notify-api.line.me/api/notify", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${LINE_NOTIFY_TOKEN}`,
+    },
+    body: params,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
 export const pipiSchedule = async (req: Request, res: Response) => {
   try {
     await authorize().catch(() => {
@@ -39,46 +58,24 @@ export const pipiSchedule = async (req: Request, res: Response) => {
 
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-    const result = await calendar.calendarList.get({ calendarId: "primary" });
-    // calendar.events.list(
-    //   {
-    //     calendarId: "primary",
-    //   },
-    //   (err, res) => {
-    //     if (err || !res) return console.log("The API returned an error: " + err);
-    //     const events = res.data.items;
-    //     console.log("events: ", events);
-    //     if (events && events.length) {
-    //       console.log("Upcoming 10 events:");
-
-    //       events.map((event, i) => {
-    //         const start = event.start?.dateTime || event.start?.date;
-    //         console.log(`${start} - ${event.summary}`);
-    //         const params = new FormData();
-    //         params.append("message", `${start} - ${event.summary}`);
-
-    //         fetch("https://notify-api.line.me/api/notify", {
-    //           method: "POST", // or 'PUT'
-    //           headers: {
-    //             Authorization: `Bearer ${LINE_NOTIFY_TOKEN}`,
-    //           },
-    //           body: params,
-    //         })
-    //           .then((response) => response.json())
-    //           .then((data) => {
-    //             console.log("Success:", data);
-    //           })
-    //           .catch((error) => {
-    //             console.error("Error:", error);
-    //           });
-    //       });
-    //     } else {
-    //       console.log("No upcoming events found.");
-    //     }
-    //   }
-
-    // );
-    res.send(result);
+    try {
+      const { data } = await calendar.events.list({
+        calendarId: "primary",
+        maxResults: 10,
+        singleEvents: true,
+        orderBy: "startTime",
+      });
+      const events = data.items;
+      if (events && events.length) {
+        const message = events.map((event) => event.summary).join(" ");
+        sendMessage(message);
+      } else {
+        res.send("No upcoming events found.");
+      }
+    } catch (e) {
+      res.status(500);
+      res.send(e);
+    }
   } catch (err) {
     res.status(500);
     res.send("An error occured");
