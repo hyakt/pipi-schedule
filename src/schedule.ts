@@ -60,6 +60,7 @@ export const pipiSchedule = async (_req: Request, res: Response) => {
       if (events && events.length) {
         const message = events.map((event) => event.summary).join(" ");
         sendMessage(message);
+        res.send("ok");
       } else {
         res.send("No upcoming events found.");
       }
