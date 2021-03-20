@@ -4,22 +4,13 @@ import { google } from "googleapis";
 import fetch from "node-fetch";
 import FormData from "form-data";
 
+import { oauth2Client } from "./oauth2Client";
+
 const fsPromises = fs.promises;
 
-const {
-  LINE_NOTIFY_TOKEN,
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URL,
-} = process.env;
+const { LINE_NOTIFY_TOKEN } = process.env;
 
 const TOKEN_PATH = "token.json";
-
-const oauth2Client = new google.auth.OAuth2(
-  CLIENT_ID,
-  CLIENT_SECRET,
-  REDIRECT_URL
-);
 
 const authorize = async () => {
   try {
@@ -49,7 +40,7 @@ const sendMessage = (message: string): void => {
     });
 };
 
-export const pipiSchedule = async (req: Request, res: Response) => {
+export const pipiSchedule = async (_req: Request, res: Response) => {
   try {
     await authorize().catch(() => {
       res.status(500);
