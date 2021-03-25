@@ -1,21 +1,18 @@
-import fs from "fs";
 import { Request, Response } from "express";
 import { google } from "googleapis";
 import fetch from "node-fetch";
 import FormData from "form-data";
 
 import { oauth2Client } from "./oauth2Client";
-
-const fsPromises = fs.promises;
+import { download } from "./storage";
 
 const { LINE_NOTIFY_TOKEN } = process.env;
 
-const TOKEN_PATH = "token.json";
-
 const authorize = async () => {
   try {
-    const token = await fsPromises.readFile(TOKEN_PATH, "utf-8");
-    oauth2Client.setCredentials(JSON.parse(token));
+    const tokenBuffer = await download();
+    const token = JSON.parse(tokenBuffer.toString());
+    oauth2Client.setCredentials(token);
   } catch (err) {
     return Promise.reject("Can not read file.");
   }
