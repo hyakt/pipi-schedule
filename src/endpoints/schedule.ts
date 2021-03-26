@@ -4,9 +4,9 @@ import fetch from "node-fetch";
 import FormData from "form-data";
 import dayjs from "dayjs";
 
-import { oauth2Client } from "./oauth2Client";
-import { downloadToken } from "./storage";
-import * as d from "./date";
+import { oauth2Client } from "~/utils/oauth2Client";
+import { downloadToken } from "~/utils/storage";
+import * as d from "~/utils/date";
 
 const { LINE_NOTIFY_TOKEN } = process.env;
 
@@ -114,7 +114,7 @@ export const pipiSchedule = async (_req: Request, res: Response) => {
       await sendMessage("エラーで予定が取得できませんでした😭");
       await sendMessage(e);
       res.status(500);
-      res.send(e);
+      res.send(e.toString());
     }
   } catch (err) {
     res.status(500);

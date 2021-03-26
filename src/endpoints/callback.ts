@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { oauth2Client } from "./oauth2Client";
-import { saveToken } from "./storage";
+import { oauth2Client } from "~/utils/oauth2Client";
+import { saveToken } from "~/utils/storage";
 
 export const callback = async (req: Request, res: Response) => {
   try {

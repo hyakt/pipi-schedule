@@ -1,3 +1,3 @@
-export { auth } from "./auth";
-export { callback } from "./callback";
-export { pipiSchedule } from "./schedule";
+export { auth } from "./endpoints/auth";
+export { callback } from "./endpoints/callback";
+export { pipiSchedule } from "./endpoints/schedule";
