@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { oauth2Client } from "~/utils/oauth2Client";
+import { oauth2Client } from "~/utils/oauth";
 
 const scopes = ["https://www.googleapis.com/auth/calendar.readonly"];
 

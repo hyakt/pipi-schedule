@@ -4,21 +4,10 @@ import fetch from "node-fetch";
 import FormData from "form-data";
 import dayjs from "dayjs";
 
-import { oauth2Client } from "~/utils/oauth2Client";
-import { downloadToken } from "~/utils/storage";
+import { oauth2Client, setToken } from "~/utils/oauth";
 import * as d from "~/utils/date";
 
 const { LINE_NOTIFY_TOKEN } = process.env;
-
-const authorize = async () => {
-  try {
-    const tokenBuffer = await downloadToken();
-    const token = JSON.parse(tokenBuffer.toString());
-    oauth2Client.setCredentials(token);
-  } catch (err) {
-    throw err;
-  }
-};
 
 const cosmeEvent = (event: calendar_v3.Schema$Event): string => {
   if (!event.start?.dateTime || !event.end?.dateTime)
@@ -98,7 +87,7 @@ const sendMessage = async (message: string): Promise<void> => {
 
 export const pipiSchedule = async (_req: Request, res: Response) => {
   try {
-    await authorize().catch(() => {
+    await setToken().catch(() => {
       res.status(500);
       res.send("please auhorize first");
     });

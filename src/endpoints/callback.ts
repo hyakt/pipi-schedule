@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { oauth2Client } from "~/utils/oauth2Client";
+import { oauth2Client } from "~/utils/oauth";
 import { saveToken } from "~/utils/storage";
 
 export const callback = async (req: Request, res: Response) => {
