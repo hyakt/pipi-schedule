@@ -31,7 +31,7 @@ const todaySchedule = async (
 
     if (data.items && data.items.length) {
       return [
-        `今日(${d.today.format("MM月dd日(ddd)")})の予定`,
+        `今日(${d.today.format("MM月DD日(ddd)")})の予定`,
         ...data.items.map(cosmeEvent),
       ];
     }
@@ -56,8 +56,8 @@ const weeklySchedule = async (
 
     if (data.items && data.items.length) {
       return [
-        `今週(${d.today.format("MM月dd日")}~${d.nextWeek.format(
-          "MM月dd日"
+        `今週(${d.today.format("MM月DD日")}~${d.nextWeek.format(
+          "MM月DD日"
         )})の予定`,
         ...data.items.map(cosmeEvent),
       ];
