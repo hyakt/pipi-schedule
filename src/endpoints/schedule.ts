@@ -1,13 +1,10 @@
 import { Request, Response } from "express";
 import { calendar_v3, google } from "googleapis";
-import fetch from "node-fetch";
-import FormData from "form-data";
 import dayjs from "dayjs";
 
 import { oauth2Client, setToken } from "~/utils/oauth";
 import * as d from "~/utils/date";
-
-const { LINE_NOTIFY_TOKEN } = process.env;
+import { sendMessage } from "~/utils/line";
 
 const cosmeEvent = (event: calendar_v3.Schema$Event): string => {
   if (!event.start?.dateTime || !event.end?.dateTime)
@@ -19,7 +16,7 @@ const cosmeEvent = (event: calendar_v3.Schema$Event): string => {
 
 const todaySchedule = async (
   calendar: calendar_v3.Calendar
-): Promise<string[]> => {
+): Promise<string> => {
   try {
     const { data } = await calendar.events.list({
       calendarId: "primary",
@@ -33,10 +30,10 @@ const todaySchedule = async (
       return [
         `今日(${d.today.format("MM月DD日(ddd)")})の予定`,
         ...data.items.map(cosmeEvent),
-      ];
+      ].join("\n");
     }
 
-    return ["今日の予定はありません"];
+    return "今日の予定はありません";
   } catch (err) {
     throw err;
   }
@@ -44,7 +41,7 @@ const todaySchedule = async (
 
 const weeklySchedule = async (
   calendar: calendar_v3.Calendar
-): Promise<string[]> => {
+): Promise<string> => {
   try {
     const { data } = await calendar.events.list({
       calendarId: "primary",
@@ -60,28 +57,12 @@ const weeklySchedule = async (
           "MM月DD日"
         )})の予定`,
         ...data.items.map(cosmeEvent),
-      ];
+      ].join("\n");
     }
 
-    return ["今週の予定はありません"];
+    return "今週の予定はありません";
   } catch (err) {
     throw err;
-  }
-};
-
-const sendMessage = async (message: string): Promise<void> => {
-  const params = new FormData();
-  params.append("message", `${message}`);
-  try {
-    await fetch("https://notify-api.line.me/api/notify", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LINE_NOTIFY_TOKEN}`,
-      },
-      body: params,
-    });
-  } catch (e) {
-    throw e;
   }
 };
 
@@ -94,9 +75,8 @@ export const pipiSchedule = async (req: Request, res: Response) => {
 
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     const { when } = req.query;
-    console.log("req.query", req.query);
     try {
-      let schedule: string[];
+      let schedule: string;
       switch (when) {
         case "nextWeek":
           schedule = await weeklySchedule(calendar);
@@ -104,7 +84,7 @@ export const pipiSchedule = async (req: Request, res: Response) => {
         default:
           schedule = await todaySchedule(calendar);
       }
-      schedule.map(sendMessage);
+      sendMessage(schedule);
       res.send("ok");
     } catch (e) {
       await sendMessage("エラーで予定が取得できませんでした😭");
