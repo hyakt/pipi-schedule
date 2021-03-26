@@ -12,7 +12,9 @@ const cosmeEvent = (event: calendar_v3.Schema$Event): string => {
     return `終日 - ${event.summary}`;
   const start = dayjs(event.start?.dateTime);
   const end = dayjs(event.end?.dateTime);
-  return `${start.format("HH:mm")}から${end.format("HH:mm")}に${event.summary}`;
+  return `${start.format("HH:mm")}から${end.format("HH:mm")} - ${
+    event.summary
+  }`;
 };
 
 const todaySchedule = async (
@@ -32,7 +34,7 @@ const todaySchedule = async (
         `今日(${d.today.format("MM月DD日(ddd)")})の予定`,
         "----------",
         ...data.items.map(cosmeEvent),
-        "の予定です💁🏼‍♂️",
+        "の予定があります💁🏼‍♂️",
       ].join("\n");
     }
 
@@ -68,7 +70,7 @@ const weeklySchedule = async (
       const weeklySchedule = Object.entries(groupBy(schedule, "date"))
         .map(([k, v]) => [
           k,
-          ...v.map((e) => `${e.time ? e.time + "から" : ""}${e.summary}`),
+          ...v.map((e) => ` ${e.time ? e.time + "から" : ""}${e.summary}`),
         ])
         .flat();
 
@@ -78,7 +80,7 @@ const weeklySchedule = async (
         )})の予定`,
         "----------",
         ...weeklySchedule,
-        "の予定です🤞",
+        "の予定があります🤞",
       ].join("\n");
     }
 
