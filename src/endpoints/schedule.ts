@@ -6,6 +6,7 @@ import groupBy from "lodash.groupby";
 import { oauth2Client, setToken } from "~/utils/oauth";
 import * as d from "~/utils/date";
 import { sendMessage } from "~/utils/line";
+import { getTokyoWeather } from "~/utils/weather";
 
 const cosmeEvent = (event: calendar_v3.Schema$Event): string => {
   if (!event.start?.dateTime || !event.end?.dateTime)
@@ -29,16 +30,19 @@ const todaySchedule = async (
       timeMax: d.tomorrow.toISOString(),
     });
 
+    const weather = await getTokyoWeather();
+
     if (data.items && data.items.length) {
       return [
-        `今日(${d.today.format("MM月DD日(ddd)")})の予定`,
+        `今日${d.today.format("MM月DD日(ddd)")}の予定`,
         "----------",
         ...data.items.map(cosmeEvent),
         "の予定があります💁🏼‍♂️",
+        `天気は ${weather} です`,
       ].join("\n");
     }
 
-    return "今日の予定はありません😋";
+    return ["今日の予定はありません👋", `天気は ${weather} です`].join("\n");
   } catch (err) {
     throw err;
   }
