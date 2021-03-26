@@ -85,7 +85,7 @@ const sendMessage = async (message: string): Promise<void> => {
   }
 };
 
-export const pipiSchedule = async (_req: Request, res: Response) => {
+export const pipiSchedule = async (req: Request, res: Response) => {
   try {
     await setToken().catch(() => {
       res.status(500);
@@ -93,10 +93,17 @@ export const pipiSchedule = async (_req: Request, res: Response) => {
     });
 
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
-
+    const { when } = req.query;
+    console.log("req.query", req.query);
     try {
       let schedule: string[];
-      schedule = await todaySchedule(calendar);
+      switch (when) {
+        case "nextWeek":
+          schedule = await weeklySchedule(calendar);
+          break;
+        default:
+          schedule = await todaySchedule(calendar);
+      }
       schedule.map(sendMessage);
       res.send("ok");
     } catch (e) {
