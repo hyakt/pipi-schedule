@@ -116,3 +116,4 @@ dist
 .pnp.*
 
 token.json
+env.yaml

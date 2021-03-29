@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
+  "config": {
+    "runtime": "nodejs12",
+    "envfile": "env.yaml"
+  },
   "scripts": {
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
-    "deploy": "npm run build && gcloud functions deploy",
+    "deploy": "gcloud functions deploy --trigger-http --runtime $npm_package_config_runtime --env-vars-file $npm_package_config_envfile",
+    "release": "npm run build && npm run deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
