@@ -8,7 +8,9 @@ export const getTokyoWeather = async () => {
 
   const telop = weather.forecasts[0].telop as string;
   const telopEmoji = telop
+    .replace("晴れ", "☀️")
     .replace("晴", "☀️")
+    .replace("曇り", "☁️")
     .replace("曇", "☁️")
     .replace("雨", "☔️");
   return telopEmoji;
