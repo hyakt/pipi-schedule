@@ -26,7 +26,7 @@ export const today = async (
   });
 
   if (data.items && data.items.length) {
-    return data.items.map(cosmeEvent).join("n");
+    return data.items.map(cosmeEvent).join("\n");
   }
 };
 

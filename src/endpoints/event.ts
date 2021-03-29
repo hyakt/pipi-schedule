@@ -18,7 +18,7 @@ const todayEvents = async (calendar: calendar_v3.Calendar): Promise<string> => {
     `今日${d.today.format("MM月DD日(ddd)")}の予定`,
     "---------------",
     schedule
-      ? [...schedule, "の予定があります💁🏼‍♂️"].join("\n")
+      ? [schedule, "の予定があります💁🏼‍♂️"].join("\n")
       : "今日の予定はありません👋",
     `天気は ${weather} です`,
   ].join("\n");
@@ -35,7 +35,7 @@ const weeklyEvents = async (
     )})の予定`,
     "---------------",
     schedule
-      ? [...schedule, "の予定があります💁🏼‍♂️"].join("\n")
+      ? [schedule, "の予定があります💁🏼‍♂️"].join("\n")
       : "今週の予定はありません🚀",
   ].join("\n");
 };
