@@ -7,6 +7,7 @@ import { getTokyoWeather } from "~/utils/weather";
 import {
   today as todaySchedule,
   weekly as weeklySchedule,
+  add as addEvents,
 } from "~/utils/schedule";
 import * as d from "~/utils/date";
 
@@ -70,5 +71,22 @@ export const pipiSchedule = async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500);
     res.send("An error occured");
+  }
+};
+
+export const addSchedule = async (_req: Request, res: Response) => {
+  await setToken().catch(() => {
+    res.status(500);
+    res.send("please auhorize first");
+  });
+
+  const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+
+  try {
+    await addEvents(calendar);
+    res.send("ok");
+  } catch (err) {
+    res.status(500);
+    res.send(err);
   }
 };

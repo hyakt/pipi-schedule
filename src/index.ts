@@ -1,3 +1,3 @@
 export { auth } from "./endpoints/auth";
 export { callback } from "./endpoints/callback";
-export { pipiSchedule } from "./endpoints/event";
+export { pipiSchedule, addSchedule } from "./endpoints/event";

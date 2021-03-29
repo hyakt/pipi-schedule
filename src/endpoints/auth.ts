@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { oauth2Client } from "~/utils/oauth";
 
-const scopes = ["https://www.googleapis.com/auth/calendar.readonly"];
+const scopes = ["https://www.googleapis.com/auth/calendar"];
 
 export const auth = (_: Request, res: Response) => {
   const url = oauth2Client.generateAuthUrl({
@@ -10,15 +10,4 @@ export const auth = (_: Request, res: Response) => {
   });
 
   res.send(url);
-};
-
-export const callback = async (req: Request, res: Response) => {
-  try {
-    const { tokens } = await oauth2Client.getToken(req.query.code as string);
-    res.send(tokens);
-  } catch (err) {
-    res.status(500);
-    console.error(err);
-    res.send("Can not get credentials.");
-  }
 };

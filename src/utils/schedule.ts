@@ -4,6 +4,8 @@ import groupBy from "lodash.groupby";
 
 import * as d from "~/utils/date";
 
+const { TZ } = process.env;
+
 const cosmeEvent = (event: calendar_v3.Schema$Event): string => {
   if (!event.start?.dateTime || !event.end?.dateTime)
     return `終日 - ${event.summary}`;
@@ -61,4 +63,42 @@ export const weekly = async (
 
     return weeklySchedule.join("\n");
   }
+};
+
+export const add = async (calendar: calendar_v3.Calendar) => {
+  const events = [
+    {
+      summary: "お昼ご飯🍙",
+      description: "自動挿入されたスケジュール",
+      start: {
+        dateTime: dayjs().set("hour", 12).set("minute", 0).toISOString(),
+        timeZone: TZ,
+      },
+      end: {
+        dateTime: dayjs().set("hour", 13).set("minute", 0).toISOString(),
+        timeZone: TZ,
+      },
+    },
+    {
+      summary: "終業🍺",
+      description: "自動挿入されたスケジュール",
+      start: {
+        dateTime: dayjs().set("hour", 19).set("minute", 0).toISOString(),
+        timeZone: TZ,
+      },
+      end: {
+        dateTime: dayjs().set("hour", 19).set("minute", 0).toISOString(),
+        timeZone: TZ,
+      },
+    },
+  ];
+
+  return Promise.all(
+    events.map((event) =>
+      calendar.events.insert({
+        calendarId: "primary",
+        requestBody: event,
+      })
+    )
+  );
 };
