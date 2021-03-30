@@ -11,6 +11,7 @@
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "deploy": "gcloud functions deploy --trigger-http --runtime $npm_package_config_runtime --env-vars-file $npm_package_config_envfile",
     "release": "npm run build && npm run deploy",
+    "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
