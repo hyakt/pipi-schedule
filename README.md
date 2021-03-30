@@ -1,5 +1,8 @@
+[![Actions Status](https://github.com/hyakt/pipi-schedule/workflows/CI/badge.svg)](https://github.com/hyakt/pipi-schedule/actions)
+
 pipi-schedule
 ==================
+
 Googleカレンダーの予定をLINEに通知するアプリ
 
 デプロイ方法
