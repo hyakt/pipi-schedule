@@ -16,12 +16,9 @@ const todayEvents = async (calendar: calendar_v3.Calendar): Promise<string> => {
   const weather = await getTokyoWeather();
 
   return [
-    `今日${d.today.format("MM月DD日(ddd)")}の予定`,
+    `${d.today.format("MM/DD(ddd)")}の予定 ${weather}`,
     "---------------",
-    schedule
-      ? [schedule, "の予定があります💁🏼‍♂️"].join("\n")
-      : "今日の予定はありません👋",
-    `天気は ${weather} です`,
+    schedule || "今日の予定はありません👋",
   ].join("\n");
 };
 
@@ -31,13 +28,9 @@ const weeklyEvents = async (
   const schedule = await weeklySchedule(calendar);
 
   return [
-    `今週(${d.today.format("MM月DD日")}~${d.nextWeek.format(
-      "MM月DD日"
-    )})の予定`,
+    `今週(${d.today.format("MM/DD")}~${d.nextWeek.format("MM/DD")})の予定`,
     "---------------",
-    schedule
-      ? [schedule, "の予定があります💁🏼‍♂️"].join("\n")
-      : "今週の予定はありません🚀",
+    schedule || "今週の予定はありません🚀",
   ].join("\n");
 };
 
