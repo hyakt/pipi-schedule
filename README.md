@@ -5,6 +5,11 @@ pipi-schedule
 
 Googleカレンダーの予定をLINEに通知するアプリ
 
+GCP認証
+----------
+1. `gcoud auth login`
+2. `gcloud config set project $PROJECT_NAME`
+
 デプロイ方法
 -----------
 1. `cp env.example.yaml env.yaml`して必要な事項を記載
