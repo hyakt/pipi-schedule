@@ -12,6 +12,9 @@ export const getTokyoWeather = async () => {
     .replace("晴", "☀️")
     .replace("曇り", "☁️")
     .replace("曇", "☁️")
-    .replace("雨", "☔️");
+    .replace("雨", "☔️")
+    .replace("のち", "🔜")
+    .replace("一時", "");
+
   return telopEmoji;
 };
