@@ -7,7 +7,7 @@ Googleカレンダーの予定をLINEに通知するアプリ
 
 GCP認証
 ----------
-1. `gcoud auth login`
+1. `gcloud auth login`
 2. `gcloud config set project $PROJECT_NAME`
 
 デプロイ方法
