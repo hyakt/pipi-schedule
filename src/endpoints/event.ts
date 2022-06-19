@@ -11,11 +11,13 @@ import {
 } from "~/utils/schedule";
 import * as d from "~/utils/date";
 
-const todayEvents = async (calendar: calendar_v3.Calendar): Promise<string | undefined> => {
+const todayEvents = async (
+  calendar: calendar_v3.Calendar
+): Promise<string | undefined> => {
   const schedule = await todaySchedule(calendar);
   const weather = await getTokyoWeather();
 
-  if (!schedule) return
+  if (!schedule) return;
   return [
     `${d.today.format("MM/DD(ddd)")}の予定 ${weather}`,
     "---------------",
@@ -54,8 +56,7 @@ export const pipiSchedule = async (req: Request, res: Response) => {
         default:
           schedule = await todayEvents(calendar);
       }
-      if (!schedule) return
-      sendMessage(schedule);
+      if (schedule) sendMessage(schedule);
       res.send("ok");
     } catch (e) {
       await sendMessage("エラーで予定が取得できませんでした😭");
